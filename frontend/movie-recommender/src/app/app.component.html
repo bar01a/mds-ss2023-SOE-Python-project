@@ -1,0 +1,33 @@
+
+<section class="select-movies-area">
+  <div class="movies">
+    <div class="movie-box" *ngFor="let movie of movies">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{movie.title}}</mat-card-title>
+          <mat-card-subtitle>{{movie.genres.join(", ")}}</mat-card-subtitle>
+        </mat-card-header>
+        <div class="image-and-actions">
+          <img [src]="movie.image" mat-card-image>
+          <mat-card-actions>
+            <button class="like-movie"
+                    [ngClass]="{'selected': movie.like === true}" mat-flat-button
+                    (click)="likeMovie(movie)">
+              <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_up"></mat-icon>
+            </button>
+            <button class="dislike-movie"
+                    [ngClass]="{'selected': movie.like === false}" mat-flat-button
+                    (click)="dislikeMovie(movie)">
+              <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_down"></mat-icon>
+            </button>
+          </mat-card-actions>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  <div class="recommendations-action">
+    <button mat-raised-button color="primary" [disabled]="!enoughLikedMovies">GET RECOMMENDATIONS</button>
+  </div>
+</section>
+
+

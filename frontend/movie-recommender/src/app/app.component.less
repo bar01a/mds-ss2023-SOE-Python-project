@@ -1,0 +1,76 @@
+
+.select-movies-area {
+  display: flex;
+
+  .movies {
+    flex: 1;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .movie-box {
+      width: 230px;
+      margin: 20px;
+
+      mat-card {
+        height: 100%;
+
+        mat-card-header mat-card-subtitle {
+          margin-bottom: 10px;
+        }
+
+        .image-and-actions {
+          margin-top: auto;
+        }
+
+        img {
+          object-fit: contain;
+          max-width: 100%;
+        }
+
+        mat-card-actions {
+          display: flex;
+          justify-content: center;
+
+          button {
+            min-width: 15%;
+            border: 2px solid transparent;
+
+            &.like-movie {
+              &.selected {
+                border: 2px solid green;
+              }
+
+              mat-icon {
+                color: green;
+              }
+            }
+
+            &.dislike-movie {
+              &.selected {
+                border: 2px solid crimson;
+              }
+
+              mat-icon {
+                color: crimson;
+              }
+            }
+
+            mat-icon {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .recommendations-action {
+    button {
+      position: sticky;
+      top: 50%;
+    }
+  }
+}
+
+
