@@ -1,7 +1,9 @@
-
 <section class="select-movies-area">
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchText" (input)="searchMovies()" placeholder="Search movies">
+  </div>
   <div class="movies">
-    <div class="movie-box" *ngFor="let movie of movies">
+    <div class="movie-box" *ngFor="let movie of filteredMovies">
       <mat-card>
         <mat-card-header>
           <mat-card-title>{{movie.title}}</mat-card-title>
@@ -29,5 +31,3 @@
     <button mat-raised-button color="primary" [disabled]="!enoughLikedMovies">GET RECOMMENDATIONS</button>
   </div>
 </section>
-
-

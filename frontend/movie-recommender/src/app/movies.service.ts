@@ -15,7 +15,7 @@ export class MoviesService {
 
   getInitialMovies(): Observable<Movie[]> {
     // MOCK data
-    /*return of([
+    return of([
       {
         movieId: 1,
         title: "John Wick 4",
@@ -28,7 +28,7 @@ export class MoviesService {
         genres: ["Action", "Comedy"],
         image: "https://www.themoviedb.org/t/p/w440_and_h660_face/j3S6HI4omonneHjZN9xypYVfEt0.jpg"
       }
-    ]);*/
+    ]);
 
     return this.http.get<Movie[]>(this.api_url + this.movies_get_url)
       .pipe(
