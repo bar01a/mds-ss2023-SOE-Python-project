@@ -4,6 +4,7 @@ import pandas as pd
 import json
 import requests
 import secrets
+import paths_to_files
 from importlib import reload
 reload(secrets)
 
@@ -11,8 +12,8 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-movies = pd.read_csv("path/to/movies.csv")
-links = pd.read_csv("path/to/links.csv")
+movies = pd.read_csv(paths_to_files.path_to_movies_csv)
+links = pd.read_csv(paths_to_files.path_to_links_csv)
 movies["genres"] = movies["genres"].apply(lambda x: x.split("|"))
 poster_path = "https://image.tmdb.org/t/p/w400"
 movie_detail_path = "https://api.themoviedb.org/3/movie/"
