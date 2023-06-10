@@ -27,14 +27,27 @@ def get_image_path(x):
     return poster_path + response.json()["poster_path"]
 
 initial_movies = movies[0:6]
-initial_movies = pd.merge(initial_movies, links, on = "movieId", how = "left")
+initial_movies = pd.merge(initial_movies, links, on="movieId", how="left")
 initial_movies["image"] = initial_movies["tmdbId"].apply(get_image_path)
 
 @app.route('/')
 def index():
     return 'Server Works juhu!'
 
-@app.route('/api/initial-movies', methods = ['GET'])
+@app.route('/api/initial-movies', methods=['GET'])
 @cross_origin()
 def get_initial_movies():
-    return json.dumps(initial_movies.to_dict('records'))
+    genres = {}
+
+    for genre in movies["genres"].explode().unique():
+        genres[genre] = []
+
+    for movie in initial_movies.to_dict('records'):
+        movie_genres = movie["genres"]
+        for genre in movie_genres:
+            if genre in genres:
+                genres[genre].append(movie)
+    
+    sorted_movies = [{"genre": genre, "movies": movie_list} for genre, movie_list in genres.items()]
+
+    return json.dumps(sorted_movies)

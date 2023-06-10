@@ -13,7 +13,7 @@ export class AppComponent {
   constructor(private movieService: MoviesService) { }
 
   movies: Movie[] = [];
-  filteredMovies: Movie[] = [];
+  filteredMovies: { genre: string, movies: Movie[] }[] = [];
   enoughLikedMovies = false;
   minLikedMoviesRequired = 2;
   searchText = '';
@@ -25,8 +25,24 @@ export class AppComponent {
   getMovies(): void {
     this.movieService.getInitialMovies().subscribe(movies => {
       this.movies = movies;
-      this.filteredMovies = movies;
+      this.filteredMovies = this.groupMoviesByGenre(movies);
     });
+  }
+
+  groupMoviesByGenre(movies: Movie[]): { genre: string, movies: Movie[] }[] {
+    const groupedMovies: { [key: string]: Movie[] } = {};
+
+    for (const movie of movies) {
+      for (const genre of movie.genres) {
+        if (groupedMovies.hasOwnProperty(genre)) {
+          groupedMovies[genre].push(movie);
+        } else {
+          groupedMovies[genre] = [movie];
+        }
+      }
+    }
+
+    return Object.entries(groupedMovies).map(([genre, movies]) => ({ genre, movies }));
   }
 
   likeMovie(movie: Movie) {
@@ -43,11 +59,24 @@ export class AppComponent {
 
   searchMovies(): void {
     if (this.searchText.trim() === '') {
-      this.filteredMovies = this.movies;
+      this.filteredMovies = this.groupMoviesByGenre(this.movies);
     } else {
-      this.filteredMovies = this.movies.filter(movie =>
-        movie.title.toLowerCase().includes(this.searchText.toLowerCase())
-      );
+      const filteredMovies: { genre: string, movies: Movie[] }[] = [];
+
+      for (const group of this.filteredMovies) {
+        const filteredGroupMovies = group.movies.filter(movie =>
+          movie.title.toLowerCase().includes(this.searchText.toLowerCase())
+        );
+
+        if (filteredGroupMovies.length > 0) {
+          filteredMovies.push({
+            genre: group.genre,
+            movies: filteredGroupMovies
+          });
+        }
+      }
+
+      this.filteredMovies = filteredMovies;
     }
   }
 }
