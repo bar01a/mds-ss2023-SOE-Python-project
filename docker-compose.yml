@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  flask_app:
+    build:
+      context: backend
+    ports:
+      - "5000:5000"
+    networks:
+      - network
+    container_name: flask_app
+
+
+networks:
+  network:
+    name: network
