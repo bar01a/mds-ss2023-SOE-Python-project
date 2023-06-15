@@ -1,34 +1,102 @@
-<section class="select-movies-area">
-  <div class="search-bar">
-    <input type="text" [(ngModel)]="searchText" (input)="searchMovies()" placeholder="Search movies">
-  </div>
-  <div class="movies">
-    <div *ngFor="let group of filteredMovies">
-      <h2>{{ group.genre }}</h2>
-      <div class="movie-box" *ngFor="let movie of group.movies">
+<section class="recommendations-section">
+  <div *ngFor="let movieRec of movieRecommendations" [hidden]="movieRecommendations.length === 0">
+    <h3>{{movieRec.movie.title}}:</h3>
+    <div class="movieRecommendations">
+      <div class="recommendation" *ngFor="let rec of movieRec.recommendations">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>{{movie.title}}</mat-card-title>
-            <mat-card-subtitle>{{movie.genres.join(", ")}}</mat-card-subtitle>
+            <mat-card-title>{{rec.title}}</mat-card-title>
+            <mat-card-subtitle>{{rec.genres.join(", ")}}</mat-card-subtitle>
           </mat-card-header>
           <div class="image-and-actions">
-            <img [src]="movie.image" mat-card-image>
-            <mat-card-actions>
-              <button class="like-movie" [ngClass]="{'selected': movie.like === true}" mat-flat-button
-                (click)="likeMovie(movie)">
-                <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_up"></mat-icon>
-              </button>
-              <button class="dislike-movie" [ngClass]="{'selected': movie.like === false}" mat-flat-button
-                (click)="dislikeMovie(movie)">
-                <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_down"></mat-icon>
-              </button>
-            </mat-card-actions>
+            <img [src]="rec.image" mat-card-image>
           </div>
         </mat-card>
       </div>
     </div>
   </div>
+</section>
+
+
+<section class="select-movies-area" [hidden]="movieRecommendations.length > 0">
+  <div class="search-bar-and-movies">
+    <div class="search-bar">
+      <mat-form-field>
+        <mat-label>Search for Movies</mat-label>
+        <input matInput type="text" [(ngModel)]="searchText" (input)="searchMovies()" placeholder="Search movies">
+      </mat-form-field>
+    </div>
+    <div class="movies">
+      <ng-container *ngIf="searchResults.length > 0">
+        <div class="movie-box" *ngFor="let movie of searchResults">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{movie.title}}</mat-card-title>
+              <mat-card-subtitle>{{movie.genres.join(", ")}}</mat-card-subtitle>
+            </mat-card-header>
+            <div class="image-and-actions">
+              <img [src]="movie.image" mat-card-image>
+              <mat-card-actions>
+                <button class="like-movie rating-button" [ngClass]="{'selected': isMovieRated(movie, true)}"
+                  mat-flat-button (click)="likeMovie(movie)">
+                  <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_up"></mat-icon>
+                </button>
+                <button class="dislike-movie rating-button" [ngClass]="{'selected': isMovieRated(movie, false)}"
+                  mat-flat-button (click)="dislikeMovie(movie)">
+                  <mat-icon aria-hidden="false" aria-label="Dislike" fontIcon="thumb_down"></mat-icon>
+                </button>
+              </mat-card-actions>
+            </div>
+          </mat-card>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="searchResults.length === 0">
+        <div *ngFor="let group of moviesGroups">
+          <h2>{{ group.genre }}</h2>
+          <div class="movie-box" *ngFor="let movie of group.movies">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{movie.title}}</mat-card-title>
+                <mat-card-subtitle>{{movie.genres.join(", ")}}</mat-card-subtitle>
+              </mat-card-header>
+              <div class="image-and-actions">
+                <img [src]="movie.image" mat-card-image>
+                <mat-card-actions>
+                  <button class="like-movie rating-button" [ngClass]="{'selected': isMovieRated(movie, true)}"
+                    mat-flat-button (click)="likeMovie(movie)">
+                    <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_up"></mat-icon>
+                  </button>
+                  <button class="dislike-movie rating-button" [ngClass]="{'selected': isMovieRated(movie, false)}"
+                    mat-flat-button (click)="dislikeMovie(movie)">
+                    <mat-icon aria-hidden="false" aria-label="Dislike" fontIcon="thumb_down"></mat-icon>
+                  </button>
+                </mat-card-actions>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
   <div class="recommendations-action">
-    <button mat-raised-button color="primary" [disabled]="!enoughLikedMovies">GET RECOMMENDATIONS</button>
+    <div class="rated-movies">
+      <div class="rated-movie" *ngFor="let movie of ratedMovies">
+        <h4>{{ movie.title }}</h4>
+        <div class="rating-buttons-and-image">
+          <img [src]="movie.image">
+          <button class="like-movie rating-button" [ngClass]="{'selected': isMovieRated(movie, true)}" mat-flat-button
+            (click)="likeMovie(movie)">
+            <mat-icon aria-hidden="false" aria-label="Like" fontIcon="thumb_up"></mat-icon>
+          </button>
+          <button class="dislike-movie rating-button" [ngClass]="{'selected': isMovieRated(movie, false)}"
+            mat-flat-button (click)="dislikeMovie(movie)">
+            <mat-icon aria-hidden="false" aria-label="Dislike" fontIcon="thumb_down"></mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button id="get-recommendations-button" mat-raised-button color="primary" [disabled]="!enoughLikedMovies" (click)="getRecommendations()">GET
+      RECOMMENDATIONS</button>
   </div>
 </section>

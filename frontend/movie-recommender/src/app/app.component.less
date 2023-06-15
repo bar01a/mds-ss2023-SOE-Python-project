@@ -1,12 +1,31 @@
 
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
 .select-movies-area {
   display: flex;
+
+  .search-bar-and-movies {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .search-bar {
+      align-self: center;
+    }
+  }
 
   .movies {
     flex: 1;
     display: inline-flex;
     flex-wrap: wrap;
     width: 100%;
+    align-items: flex-start;
 
     .movie-box {
       width: 230px;
@@ -31,46 +50,130 @@
         mat-card-actions {
           display: flex;
           justify-content: center;
-
-          button {
-            min-width: 15%;
-            border: 2px solid transparent;
-
-            &.like-movie {
-              &.selected {
-                border: 2px solid green;
-              }
-
-              mat-icon {
-                color: green;
-              }
-            }
-
-            &.dislike-movie {
-              &.selected {
-                border: 2px solid crimson;
-              }
-
-              mat-icon {
-                color: crimson;
-              }
-            }
-
-            mat-icon {
-              margin-right: 0;
-            }
-          }
         }
       }
     }
   }
 
   .recommendations-action {
-    button {
-      position: sticky;
-      top: 50%;
-    }
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
   }
 }
 
+.select-movies-area, .recommendations-section {
+  padding: 5px 15px;
+}
 
+#get-recommendations-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+
+button.rating-button {
+  min-width: 15%;
+  border: 2px solid transparent;
+
+  &.like-movie {
+    &.selected {
+      border: 2px solid green;
+    }
+
+    mat-icon {
+      color: green;
+    }
+  }
+
+  &.dislike-movie {
+    &.selected {
+      border: 2px solid crimson;
+    }
+
+    mat-icon {
+      color: crimson;
+    }
+  }
+
+  mat-icon {
+    margin-right: 0;
+  }
+}
+
+.recommendations-action {
+  width: 230px;
+}
+
+.rated-movies {
+  margin-bottom: 20px;
+  overflow-y: auto;
+  padding: 10px;
+  max-width: 100%;
+
+  .rated-movie {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .rating-buttons-and-image {
+      display: flex;
+      align-items: center;
+
+      .like-movie {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  > div:not(:first-child) h4 {
+    border-top: 1px solid lightgrey;
+  }
+
+  h4 {
+    margin-bottom: 0;
+    margin-top: 10px;
+    padding-top: 10px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  img {
+    max-height: 100px;
+    object-fit: contain;
+  }
+}
+
+mat-icon[fontIcon='thumb_up'] {
+  color: green;
+}
+
+mat-icon[fontIcon='thumb_down'] {
+  color: crimson;
+}
+
+.recommendations-section .movieRecommendations {
+  display: flex;
+  flex-wrap: wrap;
+
+  .mat-mdc-card {
+    --mat-card-title-text-size: 14px;
+    --mat-card-title-text-line-height: 20px;
+  }
+
+  .recommendation {
+    width: 150px;
+    margin: 15px;
+
+    img {
+      margin-top: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Movie } from "./Movie";
+import { GenreMovieGroup, Movie, MovieRecommendations } from "./Movie";
 import { MoviesService } from "./movies.service";
+import { Observable, Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,71 +13,92 @@ export class AppComponent {
 
   constructor(private movieService: MoviesService) { }
 
-  movies: Movie[] = [];
-  filteredMovies: { genre: string, movies: Movie[] }[] = [];
+  ratedMovies: Movie[] = [];
+  moviesGroups: GenreMovieGroup[] = [];
   enoughLikedMovies = false;
   minLikedMoviesRequired = 2;
   searchText = '';
+  searchResults: Movie[] = [];
+  movieRecommendations: MovieRecommendations[] = [];
+  searchSubject = new Subject<string>();
 
   ngOnInit(): void {
     this.getMovies();
+    this.searchSubject
+    .pipe(
+      debounceTime(700),
+      distinctUntilChanged(),
+      switchMap((searchQuery) => this.movieService.getMatchingMovies(searchQuery))
+    )
+    .subscribe((results) => (this.searchResults = results));
   }
 
   getMovies(): void {
     this.movieService.getInitialMovies().subscribe(movies => {
-      this.movies = movies;
-      this.filteredMovies = this.groupMoviesByGenre(movies);
+      this.moviesGroups = movies;
     });
   }
 
-  groupMoviesByGenre(movies: Movie[]): { genre: string, movies: Movie[] }[] {
-    const groupedMovies: { [key: string]: Movie[] } = {};
-
-    for (const movie of movies) {
-      for (const genre of movie.genres) {
-        if (groupedMovies.hasOwnProperty(genre)) {
-          groupedMovies[genre].push(movie);
-        } else {
-          groupedMovies[genre] = [movie];
-        }
-      }
-    }
-
-    return Object.entries(groupedMovies).map(([genre, movies]) => ({ genre, movies }));
+  isMovieRated(movie: Movie, liked: boolean) {
+    return this.ratedMovies.find(ratedMovie => ratedMovie.movieId === movie.movieId && ratedMovie.like === liked) !== undefined;
   }
 
   likeMovie(movie: Movie) {
-    // If already liked, set to null
-    movie.like = movie.like === true ? null : true;
-    this.enoughLikedMovies = this.movies.filter(movie => movie.like).length >= this.minLikedMoviesRequired;
+    let ratedMovie = this.ratedMovies.find(movie2 => movie2.movieId == movie.movieId);
+
+    // movie not yet rated
+    if (ratedMovie === undefined) {
+      this.ratedMovies.push({
+        movieId: movie.movieId,
+        title: movie.title,
+        genres: movie.genres,
+        image: movie.image,
+        like: true
+      });
+    } else if (ratedMovie.like === true) {
+      // If already liked, remove from rated movies
+      this.ratedMovies = this.ratedMovies.filter(movie => movie.movieId !== ratedMovie?.movieId);
+    } else {
+      // otherwise change to like
+      ratedMovie.like = true;
+    }
+
+    this.enoughLikedMovies = this.ratedMovies.filter(movie => movie.like).length >= this.minLikedMoviesRequired;
   }
 
   dislikeMovie(movie: Movie) {
-    // If already disliked, set to null
-    movie.like = movie.like === false ? null : false;
-    this.enoughLikedMovies = this.movies.filter(movie => movie.like).length >= this.minLikedMoviesRequired;
+    let ratedMovie = this.ratedMovies.find(movie2 => movie2.movieId == movie.movieId);
+
+    // movie not yet rated
+    if (ratedMovie === undefined) {
+      this.ratedMovies.push({
+        movieId: movie.movieId,
+        title: movie.title,
+        genres: movie.genres,
+        image: movie.image,
+        like: false
+      });
+    } else if (ratedMovie.like === false) {
+      // If already disliked, remove from rated movies
+      this.ratedMovies = this.ratedMovies.filter(movie => movie.movieId !== ratedMovie?.movieId);
+    } else {
+      // otherwise change to dislike
+      ratedMovie.like = false;
+    }
+
+    this.enoughLikedMovies = this.ratedMovies.filter(movie => movie.like).length >= this.minLikedMoviesRequired;
+  }
+
+  getRecommendations(): void {
+    this.movieService.getRecommendations(this.ratedMovies).subscribe(movieRecommendations => this.movieRecommendations = movieRecommendations);
   }
 
   searchMovies(): void {
     if (this.searchText.trim() === '') {
-      this.filteredMovies = this.groupMoviesByGenre(this.movies);
-    } else {
-      const filteredMovies: { genre: string, movies: Movie[] }[] = [];
-
-      for (const group of this.filteredMovies) {
-        const filteredGroupMovies = group.movies.filter(movie =>
-          movie.title.toLowerCase().includes(this.searchText.toLowerCase())
-        );
-
-        if (filteredGroupMovies.length > 0) {
-          filteredMovies.push({
-            genre: group.genre,
-            movies: filteredGroupMovies
-          });
-        }
-      }
-
-      this.filteredMovies = filteredMovies;
+      this.searchResults = [];
+      return;
     }
+
+    this.searchSubject.next(this.searchText.trim());
   }
 }

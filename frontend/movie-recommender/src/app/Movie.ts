@@ -5,3 +5,13 @@ export interface Movie {
   image: string;
   like?: boolean | null;
 }
+
+export interface GenreMovieGroup {
+  genre: string;
+  movies: Movie[];
+}
+
+export interface MovieRecommendations {
+  movie: Movie;
+  recommendations: Movie[];
+}
