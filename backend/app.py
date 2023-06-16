@@ -102,7 +102,7 @@ def get_matching_movies():
     matches = movies.loc[association_rules_helper.contains_movie_title(movies["title"], request.args.get('query')), :]
     matches["distance"] = matches.loc[:, "title"].apply(lambda title: edit_distance(title, request.args.get('query')))
     matches = matches.sort_values(by="distance", ascending=True)
-    matches[matches[0:7].index, "image"] = [get_image_path(movieId) for movieId in matches.iloc[0:7]["movieId"]]
+    matches.loc[matches[0:7].index, "image"] = [get_image_path(movieId) for movieId in matches.iloc[0:7]["movieId"]]
     print(matches[0:7])
     return json.dumps(matches.to_dict('records'))
 
