@@ -12,7 +12,7 @@ For more information refer to the README in the frontend directory.
 * Change file paths in `backend/paths_to_files.py`
 
 ### Manually:
-Open anaconda prompt (or in which environment flask was installed) in "backend" folder and run `flask run`.
+Open anaconda prompt (or in which environment flask was installed), navigate into "backend" folder and run `flask run`.
 
 ### Using Docker:
-Navigate to "backend" folder and run `docker compose up --build`.
+Navigate into "backend" folder and run `docker compose up --build`.
