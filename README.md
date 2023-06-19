@@ -8,7 +8,7 @@ Then, open `http://localhost:4200/` in browser. The application will automatical
 For more information refer to the README in the frontend directory. 
 
 ## Backend
-* Change API_KEY in `backend/secrets.py`
+* Change API_KEY in `backend/project_secrets.py`
 * Change file paths in `backend/paths_to_files.py`
 
 ### Manually:
