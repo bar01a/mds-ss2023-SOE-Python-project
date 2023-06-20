@@ -8,8 +8,7 @@ Then, open `http://localhost:4200/` in browser. The application will automatical
 For more information refer to the README in the frontend directory. 
 
 ## Backend
-* Change API_KEY in `backend/project_secrets.py`
-* Change file paths in `backend/paths_to_files.py`
+* Change API_KEY in `backend/project_secrets.py`.
 
 ### Manually:
 Open anaconda prompt (or in which environment flask was installed), navigate into "backend" folder and run `flask run`.
