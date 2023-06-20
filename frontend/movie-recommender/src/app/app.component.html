@@ -17,7 +17,6 @@
   </div>
 </section>
 
-
 <section class="select-movies-area" [hidden]="movieRecommendations.length > 0">
   <div class="search-bar-and-movies">
     <div class="search-bar">
@@ -96,7 +95,25 @@
         </div>
       </div>
     </div>
-    <button id="get-recommendations-button" mat-raised-button color="primary" [disabled]="!enoughLikedMovies" (click)="getRecommendations()">GET
-      RECOMMENDATIONS</button>
+    <button
+      id="get-recommendations-button"
+      mat-raised-button
+      color="primary"
+      [disabled]="!enoughLikedMovies"
+      (click)="getRecommendations()"
+    >
+      GET RECOMMENDATIONS
+    </button>
   </div>
+</section>
+
+<section class="back-button-section" *ngIf="movieRecommendations.length > 0">
+  <button
+    id="back-button"
+    mat-raised-button
+    color="primary"
+    (click)="goBack()"
+  >
+    BACK
+  </button>
 </section>

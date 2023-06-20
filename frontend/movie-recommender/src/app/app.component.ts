@@ -101,4 +101,8 @@ export class AppComponent {
 
     this.searchSubject.next(this.searchText.trim());
   }
+
+  goBack(): void {
+    this.movieRecommendations = []; // Clear the recommendations
+  }
 }
