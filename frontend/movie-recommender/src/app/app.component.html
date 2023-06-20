@@ -108,12 +108,9 @@
 </section>
 
 <section class="back-button-section" *ngIf="movieRecommendations.length > 0">
-  <button
-    id="back-button"
-    mat-raised-button
-    color="primary"
-    (click)="goBack()"
-  >
-    BACK
-  </button>
+  <div class="back-button-container">
+    <button id="back-button" mat-raised-button color="primary" (click)="goBack()">
+      GO BACK
+    </button>
+  </div>
 </section>

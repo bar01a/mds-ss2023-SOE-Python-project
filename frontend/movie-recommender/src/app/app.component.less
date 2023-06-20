@@ -74,7 +74,6 @@
   padding: 10px;
 }
 
-
 button.rating-button {
   min-width: 15%;
   border: 2px solid transparent;
@@ -176,5 +175,20 @@ mat-icon[fontIcon='thumb_down'] {
       max-width: 100%;
       object-fit: contain;
     }
+  }
+}
+
+.back-button-section {
+  position: fixed;
+  top: 63px;
+  right: 40%;
+  z-index: 10;
+}
+
+@media (max-width: 1200px) {
+  .back-button-section {
+    position: relative;
+    right: auto;
+    left: 70%;
   }
 }
