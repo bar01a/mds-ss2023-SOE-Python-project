@@ -8,6 +8,21 @@ The following data basis was used for this:
 * [grouplens](https://grouplens.org/datasets/movielens/25m/)
 * [movielens](https://movielens.org/)
 
+## Preview
+
+### Initial landing page (+ rated movies)
+![Landing page showing some popular initial movies from every category](images/Preview_Image_1.png)
+
+----
+
+### Search
+![](images/Preview_Image_2.png)
+
+----
+
+### Get relevant recommendations
+![](images/Preview_Image_3.png)
+
 ## Instructions to run the application
 In order to successfully launch the developed application, the following steps must be carried out for the frontend and backend:
 
