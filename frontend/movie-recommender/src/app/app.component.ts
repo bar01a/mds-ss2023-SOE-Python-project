@@ -27,7 +27,6 @@ export class AppComponent {
     this.searchSubject
     .pipe(
       debounceTime(700),
-      distinctUntilChanged(),
       switchMap((searchQuery) => this.movieService.getMatchingMovies(searchQuery))
     )
     .subscribe((results) => (this.searchResults = results));

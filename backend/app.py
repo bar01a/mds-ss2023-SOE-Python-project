@@ -56,7 +56,8 @@ def get_image_path(movie_id):
     if response.status_code != 200:
         movies.loc[movies["movieId"] == movie_id, "image"] = ""
         return ""
-    path_to_image = poster_path + response.json()["poster_path"]
+    movie_poster_path = response.json()["poster_path"]
+    path_to_image = (poster_path + movie_poster_path) if movie_poster_path is not None else ""
     movies.loc[movies["movieId"] == movie_id, "image"] = path_to_image
     print("Image", movie_id, path_to_image)
     return path_to_image
