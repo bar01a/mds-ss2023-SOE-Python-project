@@ -257,7 +257,7 @@ def get_recommendations(rated_movies, movies_df: pd.DataFrame,
         recommendations = []
 
         for recommendation in recommendation_dict[rated_movie["movieId"]]:
-            if len(recommendations) > recommendation_per_liked_movie:
+            if len(recommendations) >= recommendation_per_liked_movie:
                 break
             if recommendation.movieId not in disliked_movies_ids:
                 movie = movies_df[movies_df["movieId"] == recommendation.movieId].iloc[0]

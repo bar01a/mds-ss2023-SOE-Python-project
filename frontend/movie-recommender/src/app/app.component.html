@@ -1,6 +1,6 @@
 <section class="recommendations-section">
   <div *ngFor="let movieRec of movieRecommendations" [hidden]="movieRecommendations.length === 0">
-    <h3>{{movieRec.movie.title}}:</h3>
+    <h2>{{movieRec.movie.title}}:</h2>
     <div class="movieRecommendations">
       <div class="recommendation" *ngFor="let rec of movieRec.recommendations">
         <mat-card>

@@ -111,7 +111,7 @@ def get_matching_movies():
 @cross_origin()
 def get_recommendations():
     rated_movies = request.json
-    recommendation_groups = association_rules_helper.get_recommendations(rated_movies, movies, extended_recommendation_dict, 3)
+    recommendation_groups = association_rules_helper.get_recommendations(rated_movies, movies, extended_recommendation_dict, 5)
     for recGroup in recommendation_groups:
         for rec in recGroup["recommendations"]:
             rec["image"] = get_image_path(rec["movieId"])
